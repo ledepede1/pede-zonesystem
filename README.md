@@ -13,5 +13,5 @@ Genstart serveren og hav det fedt.
 ## How to Use
 ### Administrering af zoner
 <p>For at oprette en ny zone skal man have admin rank og man kan derefter bruge commanden /zonecreate</p> eks: `/zonecreate LSIA ballas Ballas -954.6571 -2441.6255 13.8353`
-<p>En admin kan også slette en zone ved at skrive /zoneremove eks: zoneremove LSIA</p>
+<p>En admin kan også slette en zone ved at skrive /zoneremove</p> eks: `zoneremove LSIA`
 
