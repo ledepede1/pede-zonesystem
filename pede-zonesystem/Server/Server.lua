@@ -99,7 +99,7 @@ AddEventHandler("get:zone:alliances", function (name)
     })
     
     --print(alliances[1].alliances)
-    TriggerClientEvent("get:alliances:client", -1, alliances[1].alliances, name)
+    TriggerClientEvent("get:alliances:client", -1, json.decode(alliances[1].alliances), name)
 end)
 
 local function capitalizeFirstLetter(inputString)
@@ -157,32 +157,27 @@ RegisterNetEvent("add:zone:alliance")
 AddEventHandler("add:zone:alliance", function(zone, allianceToAdd)
 
     local currentAlliances = {}
-    local newAlliances
     local doesAllianceExist = false
+    local Alliances = {}
 
     MySQL.ready(function ()
         MySQL.Async.fetchAll(
           'SELECT alliances FROM `zone-system` WHERE name = @zone', {['@zone'] = zone},
           function(result)
-            local AlliancesString = result[1].alliances
+            Alliances = json.decode(result[1].alliances)
 
-            if AlliancesString == nil then
-                newAlliances = allianceToAdd..","
-            else
-                for alliances in AlliancesString:gmatch("([^,]+)") do
+                for _, alliances in ipairs(Alliances) do
                     if alliances == allianceToAdd then 
                         doesAllianceExist = true 
                         break 
                     end
                     table.insert(currentAlliances, alliances)
                 end
-            end
 
 
             if doesAllianceExist == false then
                 table.insert(currentAlliances, allianceToAdd)
-                newAlliances = table.concat(currentAlliances, ",")
-                MySQL.Async.execute('UPDATE `zone-system` SET alliances = @alliances WHERE name = @zone', {['@alliances'] = newAlliances, ['@zone'] = zone})
+                MySQL.Async.execute('UPDATE `zone-system` SET alliances = @alliances WHERE name = @zone', {['@alliances'] = json.encode(currentAlliances), ['@zone'] = zone})
             end
         end)
         
@@ -192,27 +187,23 @@ end)
 
 RegisterNetEvent("remove:zone:alliance")
 AddEventHandler("remove:zone:alliance", function(zone, allianceToRemove)
-    local alliancesTable = {}
+    local currentAlliances = {}
     local updatedAlliances
 
     MySQL.ready(function ()
         MySQL.Async.fetchAll(
             'SELECT alliances FROM `zone-system` WHERE name = @zone', {['@zone'] = zone},
             function(result)
-                    local currentAlliances = result[1].alliances
-
-                    for alliance in currentAlliances:gmatch("([^,]+)") do
-                        table.insert(alliancesTable, alliance)
-                    end
-
-                    for i, alliance in ipairs(alliancesTable) do
+                    currentAlliances = json.decode(result[1].alliances)
+                    
+                    for i, alliance in ipairs(currentAlliances) do
                         if alliance == allianceToRemove then
-                            table.remove(alliancesTable, i)
+                            table.remove(currentAlliances, i)
                             break
                         end
                     end
 
-                    updatedAlliances = table.concat(alliancesTable, ',')
+                    updatedAlliances = json.encode(currentAlliances)
 
             MySQL.Async.execute('UPDATE `zone-system` SET alliances = @alliances WHERE name = @zone', {['@alliances'] = updatedAlliances, ['@zone'] = zone})
         end)

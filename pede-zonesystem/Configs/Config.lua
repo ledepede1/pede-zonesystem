@@ -21,6 +21,7 @@ Config.CallPoliceChance = {
     callat = 1 -- Ringer til politiet hvis det tilfældige tal er 1
 }
 
+
 Config.InteractDistance = 3.0 -- Hvor langt væk fra npcen man skal være for at kunne sælge
 Config.InteractKey = 38 -- Hvilken knap man skal trykke på for at sælge
 

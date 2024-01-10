@@ -67,31 +67,28 @@ AlliancesListMenu = {}
 
 RegisterNetEvent("get:alliances:client")
 AddEventHandler("get:alliances:client", function (alliances, name)
-    AlliancesString = alliances
+        if alliances ~= nil then
+        for _, job in ipairs(alliances) do
+            
+            table.insert(AlliancesListMenu, {
+                title = job,
+                onSelect = function()
+                    local confirmDelete = lib.alertDialog({
+                        header = job..Config.Menus.OwnedZonesMenu.deleteAllianceFromZone.title..name,
+                        centered = true,
+                        cancel = true
+                    })
+                    
+                    if confirmDelete == nil then return end
+                    if confirmDelete == "confirm" then
+                    TriggerServerEvent("remove:zone:alliance", name, job)
+                    end
+                end,
+            })
 
-    AlliancesListMenu = {}
-
-    for job in alliances:gmatch("([^,]+)") do
-        job = job:match("^%s*(.-)%s*$")
-
-        table.insert(AlliancesListMenu, {
-            title = job,
-            onSelect = function()
-                local confirmDelete = lib.alertDialog({
-                    header = job..Config.Menus.OwnedZonesMenu.deleteAllianceFromZone.title..name,
-                    centered = true,
-                    cancel = true
-                })
-                
-                if confirmDelete == nil then return end
-                if confirmDelete == "confirm" then
-                TriggerServerEvent("remove:zone:alliance", name, job)
-                end
-            end,
-        })
-
-        if job == ESX.PlayerData.job.name then
-            isAlliance = true
+            if job == ESX.PlayerData.job.name then
+                isAlliance = true
+            end
         end
     end
 

@@ -1,7 +1,7 @@
 CREATE TABLE `zone-system` (
   `name` varchar(55) NOT NULL,
   `owner` varchar(46) DEFAULT NULL,
-  `points` bigint(20) NOT NULL,
+  `points` bigint(20) NOT NULL,esxlegacy_146529
   `label` varchar(255) NOT NULL,
   `coords` varchar(2555) NOT NULL,
   `alliances` mediumtext DEFAULT NULL
