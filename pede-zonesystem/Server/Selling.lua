@@ -61,7 +61,7 @@ AddEventHandler("give:reward:zone", function(points, item, itemamount)
     end
 
     xPlayer.removeInventoryItem(item, itemamount)
-    xPlayer.addAccountMoney("black_money", reward+addedAmount)
+    xPlayer.addAccountMoney("black_money", reward+addedAmount*itemamount)
 
     TriggerClientEvent("notify:zone", source, Locales[Config.Language]['reward'].title, Locales[Config.Language]['reward'].desc..reward.." + "..addedAmount.." DKK")
 end)
@@ -73,7 +73,7 @@ AddEventHandler("give:reward", function(item, itemamount)
     local reward = RandomReward(item)
 
     xPlayer.removeInventoryItem(item, itemamount)
-    xPlayer.addAccountMoney("black_money", reward)
+    xPlayer.addAccountMoney("black_money", reward*itemamount)
 
     TriggerClientEvent("notify:zone", source, Locales[Config.Language]['reward'].title, Locales[Config.Language]['reward'].desc..reward.." DKK")
 end)
